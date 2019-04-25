@@ -19,7 +19,7 @@ Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
 
 " Using a non-master branch
-Plug 'rdnetto/YCM-Generator', { 'branch': 'stable' }
+"Plug 'rdnetto/YCM-Generator', { 'branch': 'stable' }
 
 " Using a tagged release; wildcard allowed (requires git 1.9.2 or above)
 Plug 'fatih/vim-go', { 'tag': '*' }
@@ -30,13 +30,13 @@ Plug 'nsf/gocode', { 'tag': 'v.20150303', 'rtp': 'vim' }
 " Plugin outside ~/.vim/plugged with post-update hook
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 
+Plug 'ludovicchabant/vim-gutentags'
 " Unmanaged plugin (manually installed and updated)
 Plug '~/my-prototype-plugin'
 
 ""
-Plug 'ludovicchabant/vim-gutentags'
+Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
 
-Plug 'Valloric/YouCompleteMe'
 " Initialize plugin system
 
 
@@ -45,12 +45,11 @@ call plug#end()
 set shell=/bin/bash
 set showcmd
 set number 
-autocmd vimenter * NERDTree
-set tags=./.tags;,.tags
+"autocmd vimenter * NERDTree
 
 "gutentags config
 " gutentags 搜索工程目录的标志，碰到这些文件/目录名就停止向上一级目录递归
-let g:gutentags_project_root = ['.root', '.svn', '.git', '.hg', '.project']
+let g:gutentags_project_root = ['.root', '.svn', '.repo', '.hg', '.project', 'src']
 
 " 所生成的数据文件的名称
 let g:gutentags_ctags_tagfile = '.tags'
@@ -79,9 +78,11 @@ let g:ycm_complete_in_strings=1
 let g:ycm_key_invoke_completion = '<c-z>'
 set completeopt=menu,menuone
 
+nnoremap <leader>jc :YcmCompleter GoToDeclaration<CR>
+nnoremap <leader>jd :YcmCompleter GoToDefinition<CR>
 noremap <c-z> <NOP>
 
 let g:ycm_semantic_triggers =  {
-           \ 'c,cpp,python,java,go,erlang,perl': ['re!\w{2}'],
+           \ 'c,cc,cpp,python,java,go,erlang,perl': ['re!\w{2}'],
            \ 'cs,lua,javascript': ['re!\w{2}'],
            \ }
