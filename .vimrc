@@ -1,5 +1,33 @@
+set showcmd
+set number 
+set cursorline
+highlight CursorLine cterm=underline ctermbg=NONE ctermfg=NONE guibg=NONE guifg=NONE
+hi Normal  ctermfg=100 ctermbg=none
 
+filetype plugin indent on
+" show existing tab with 4 spaces width
+set tabstop=4
+" when indenting with '>', use 4 spaces width
+set shiftwidth=4
+" On pressing tab, insert 4 spaces
+set expandtab
+
+set hlsearch "高亮右边搜索
+set splitright "vs向右打开
+set splitbelow "sp 向下打开
+set tags=./.tags;,.tags
+set whichwrap+=<,>,[,]
+set backspace=indent,eol,start
+"autocmd vimenter * NERDTree
+autocmd BufRead,BufNewFile *.gn set filetype=gn syntax=texmf  
 call plug#begin('~/.vim/plugged')
+set shell=/bin/bash
+" Uncomment the following to have Vim jump to the last position when
+" reopening a file
+if has("autocmd")
+    au BufReadPost * if line("`\"") > 1 && line("`\"") <= line("$") | exe "normal! g`\"" | endif
+" for simplicity, "  au BufReadPost * exe "normal! g`\"", is Okay.
+endif
 
 " Make sure you use single quotes
 
@@ -32,26 +60,25 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 " Unmanaged plugin (manually installed and updated)
 Plug '~/my-prototype-plugin'
 
-""
+"ycm"
 Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
-
+"highlight"
 Plug 'octol/vim-cpp-enhanced-highlight'
+
 " Initialize plugin system
 
+" Add maktaba and codefmt to the runtimepath.
+" (The latter must be installed before it can be used.)
+Plug 'google/vim-maktaba'
+Plug 'google/vim-codefmt'
+" Also add Glaive, which is used to configure codefmt's maktaba flags. See
+" `:help :Glaive` for usage.
+Plug 'google/vim-glaive'
 
 call plug#end()
-set shell=/bin/bash
-set showcmd
-set number 
-set cursorline
-highlight CursorLine cterm=underline ctermbg=NONE ctermfg=NONE guibg=NONE guifg=NONE
-hi Normal  ctermfg=100 ctermbg=none
-set shiftwidth=4 "自动缩进4格
-set hlsearch "高亮右边搜索
-set splitright "vs向右打开
-set splitbelow "sp 向下打开
-set tags=./.tags;,.tags
-"autocmd vimenter * NERDTree
+
+call glaive#Install()
+" Optional: Enable codefmt's default mappings on the <Leader>= prefix.
 
 "gutentags config
 " gutentags 搜索工程目录的标志，碰到这些文件/目录名就停止向上一级目录递归
@@ -82,6 +109,9 @@ let g:ycm_server_log_level = 'info'
 let g:ycm_collect_identifiers_from_comments_and_strings = 1
 let g:ycm_complete_in_strings=1
 let g:ycm_key_invoke_completion = '<c-z>'
+let g:ycm_extra_conf_globlist = ['~/chromium_v73/v73_103/*','~/v5.0/v5.0/*']
+let g:ycm_confire_extra=1
+
 set completeopt=menu,menuone
 
 nnoremap <leader>jc :YcmCompleter GoToDeclaration<CR>
@@ -107,3 +137,15 @@ let g:ycm_semantic_triggers =  {
 "           \ }
 
 
+Glaive codefmt plugin[mappings]
+augroup autoformat_settings
+  autocmd FileType bzl AutoFormatBuffer buildifier
+  autocmd FileType c,cpp,proto,javascript AutoFormatBuffer clang-format
+  autocmd FileType dart AutoFormatBuffer dartfmt
+  autocmd FileType go AutoFormatBuffer gofmt
+  autocmd FileType gn AutoFormatBuffer gn
+  autocmd FileType html,css,sass,scss,less,json AutoFormatBuffer js-beautify
+  autocmd FileType java AutoFormatBuffer google-java-format
+  autocmd FileType python AutoFormatBuffer yapf
+  " Alternative: autocmd FileType python AutoFormatBuffer autopep8
+augroup END
