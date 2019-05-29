@@ -1,8 +1,9 @@
 set showcmd
 set number 
 set cursorline
-highlight CursorLine cterm=underline ctermbg=NONE ctermfg=NONE guibg=NONE guifg=NONE
-hi Normal  ctermfg=100 ctermbg=none
+"replace by google vim-secheme plug
+"highlight CursorLine cterm=underline ctermbg=NONE ctermfg=NONE guibg=NONE guifg=NONE
+"hi Normal  ctermfg=100 ctermbg=none
 
 filetype plugin indent on
 " show existing tab with 4 spaces width
@@ -19,15 +20,34 @@ set tags=./.tags;,.tags
 set whichwrap+=<,>,[,]
 set backspace=indent,eol,start
 "autocmd vimenter * NERDTree
-autocmd BufRead,BufNewFile *.gn set filetype=gn syntax=texmf  
-call plug#begin('~/.vim/plugged')
-set shell=/bin/bash
-" Uncomment the following to have Vim jump to the last position when
-" reopening a file
+
+"gn file default filetype is conf      set colorterm = texmf
+autocmd BufRead,BufNewFile *.gn,*.gni set filetype=gn syntax=texmf
+
+"au! is clear set
+"
+autocmd BufRead,BufNewFile *.gyp,*.gypi set filetype=gyp syntax=javascript
+augroup json_autocmd
+  autocmd!
+  autocmd FileType json set autoindent
+  autocmd FileType json set formatoptions=tcq2l
+  autocmd FileType json set textwidth=78 shiftwidth=2
+  autocmd FileType json set softtabstop=2 tabstop=8
+  autocmd FileType json set expandtab
+  autocmd FileType json set foldmethod=syntax
+augroup END
 if has("autocmd")
     au BufReadPost * if line("`\"") > 1 && line("`\"") <= line("$") | exe "normal! g`\"" | endif
 " for simplicity, "  au BufReadPost * exe "normal! g`\"", is Okay.
 endif
+
+"Plug google vim-color secheme setting
+"need Plug
+call plug#begin('~/.vim/plugged')
+set shell=/bin/bash
+" Uncomment the following to have Vim jump to the last position when
+" reopening a file
+
 
 " Make sure you use single quotes
 
@@ -61,7 +81,7 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug '~/my-prototype-plugin'
 
 "ycm"
-Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
+Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer' }
 "highlight"
 Plug 'octol/vim-cpp-enhanced-highlight'
 
@@ -74,6 +94,8 @@ Plug 'google/vim-codefmt'
 " Also add Glaive, which is used to configure codefmt's maktaba flags. See
 " `:help :Glaive` for usage.
 Plug 'google/vim-glaive'
+"color
+Plug 'google/vim-colorscheme-primary'
 
 call plug#end()
 
@@ -110,9 +132,10 @@ let g:ycm_collect_identifiers_from_comments_and_strings = 1
 let g:ycm_complete_in_strings=1
 let g:ycm_key_invoke_completion = '<c-z>'
 let g:ycm_extra_conf_globlist = ['~/chromium_v73/v73_103/*','~/v5.0/v5.0/*']
+let g:ycm_global_ycm_extra_conf = '~/v5.0/v5.0/.ycm_extra_conf.py'
 let g:ycm_confire_extra=1
 
-set completeopt=menu,menuone
+"set completeopt=menu,menuone
 
 nnoremap <leader>jc :YcmCompleter GoToDeclaration<CR>
 nnoremap <leader>jd :YcmCompleter GoToDefinition<CR>
@@ -138,6 +161,17 @@ let g:ycm_semantic_triggers =  {
 
 
 Glaive codefmt plugin[mappings]
+
+
+"cpp highlight
+let g:cpp_class_scope_highlight = 1
+
+let g:cpp_member_variable_highlight = 1
+
+let g:cpp_class_decl_highlight = 1
+
+let g:cpp_experimental_simple_template_highlight = 1
+
 augroup autoformat_settings
   autocmd FileType bzl AutoFormatBuffer buildifier
   autocmd FileType c,cpp,proto,javascript AutoFormatBuffer clang-format
@@ -149,3 +183,8 @@ augroup autoformat_settings
   autocmd FileType python AutoFormatBuffer yapf
   " Alternative: autocmd FileType python AutoFormatBuffer autopep8
 augroup END
+syntax enable
+set t_Co=256
+set background=dark "light|dark"
+colorscheme primary
+
