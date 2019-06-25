@@ -1,10 +1,10 @@
 let $VIM = "$HOME/soft/vim/vim"
 "let $VIMRUNTIME="$HOME/usr/share/vim/vim82/"
-let $LD_LIBRARY_PATH=$HOME.'/toolchain/clang+llvm-9.0.0/lib:'.$LD_LIBRARY_PATH
+
 
 set showcmd
 set number
-nnoremap <F2> :set paste!<CR>
+nnoremap <F2> :set paste! <CR>
 nnoremap <F5> :noh <CR>
 
 "open current file's header or cc file
@@ -17,7 +17,7 @@ filetype plugin indent on
 
 "uname will encrypt by 亿赛通
 "synchronize the unnamed register with the clipboard register
-"set clipboard^=unnamed
+set clipboard^=unnamed
 "set clipboard?
 
 set hlsearch "高亮右边搜索
@@ -78,65 +78,65 @@ function! OpenFile()
     end
 endfunction
 
-""注释
-"function! AddNotice()
-"    let fts = ['c', 'cpp']
-"    if index(fts, &filetype) != -1 
-"        let l:addch="\/\/" 
-"    elseif (&filetype == 'vim') 
-"        let l:addch="\""
-"    else
-"        let l:addch='#'
-"    end    
-"    s/^/\=l:addch/g
-"endfunction
-"vnoremap / :call AddNotice()<CR>
+"注释
+function! AddNotice()
+    let fts = ['c', 'cpp']
+    if index(fts, &filetype) != -1 
+        let l:addch="\/\/" 
+    elseif (&filetype == 'vim') 
+        let l:addch="\""
+    else
+        let l:addch='#'
+    end    
+    s/^/\=l:addch/g
+endfunction
+vnoremap / :call AddNotice()<CR>
 "括号补全
-"inoremap ( ()<LEFT>
-"inoremap [ []<LEFT>
-"inoremap { {}<LEFT>
-"
-"function! RemovePairs()
-"    let s:line = getline(".")
-"    let s:previous_char = s:line[col(".")-1]
-"
-"    if index(["(","[","{"],s:previous_char) != -1
-"        let l:original_pos = getpos(".")
-"        execute "normal %"
-"        let l:new_pos = getpos(".")
-"        " only right (
-"        if l:original_pos == l:new_pos
-"            execute "normal! a\<BS>"
-"            return
-"        end
-"
-"        let l:line2 = getline(".")
-"        if len(l:line2) == col(".")
-"            execute "normal! v%xa"
-"        else
-"            execute "normal! v%xi"
-"        end
-"    else
-"        execute "normal! a\<BS>"
-"    end
-"endfunction
+inoremap ( ()<LEFT>
+inoremap [ []<LEFT>
+inoremap { {}<LEFT>
 
-" function! RemoveNextDoubleChar(char)
-"     let l:line = getline(".")
-"     let l:next_char = l:line[col(".")]
-" 
-"     if a:char == l:next_char
-"         execute "normal! l"
-"     else
-"         execute "normal! a" . a:char . ""
-"     end
-" endfunction
+function! RemovePairs()
+    let s:line = getline(".")
+    let s:previous_char = s:line[col(".")-1]
+
+    if index(["(","[","{"],s:previous_char) != -1
+        let l:original_pos = getpos(".")
+        execute "normal %"
+        let l:new_pos = getpos(".")
+        " only right (
+        if l:original_pos == l:new_pos
+            execute "normal! a\<BS>"
+            return
+        end
+
+        let l:line2 = getline(".")
+        if len(l:line2) == col(".")
+            execute "normal! v%xa"
+        else
+            execute "normal! v%xi"
+        end
+    else
+        execute "normal! a\<BS>"
+    end
+endfunction
+
+function! RemoveNextDoubleChar(char)
+    let l:line = getline(".")
+    let l:next_char = l:line[col(".")]
+
+    if a:char == l:next_char
+        execute "normal! l"
+    else
+        execute "normal! a" . a:char . ""
+    end
+endfunction
 
 "inoremap <BS> <C-C>:call RemovePairs()<CR>a
-" inoremap ) <ESC>:call RemoveNextDoubleChar(')')<CR>a
-" inoremap ] <ESC>:call RemoveNextDoubleChar(']')<CR>a
-" inoremap } <ESC>:call RemoveNextDoubleChar('}')<CR>a
-" inoremap > <ESC>:call RemoveNextDoubleChar('>')<CR>a
+inoremap ) <ESC>:call RemoveNextDoubleChar(')')<CR>a
+inoremap ] <ESC>:call RemoveNextDoubleChar(']')<CR>a
+inoremap } <ESC>:call RemoveNextDoubleChar('}')<CR>a
+inoremap > <ESC>:call RemoveNextDoubleChar('>')<CR>a
 
 if has('gui')
   set guioptions-=e
@@ -204,10 +204,10 @@ set shell=/bin/bash
 Plug 'junegunn/vim-easy-align'
 
 " Any valid git URL is allowed
-"Plug 'https://github.com/junegunn/vim-github-dashboard.git'
+Plug 'https://github.com/junegunn/vim-github-dashboard.git'
 
 " Multiple Plug commands can be written in a single line using | separators
-"Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 
 " On-demand loading
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
@@ -223,7 +223,7 @@ Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
 Plug 'nsf/gocode', { 'tag': 'v.20150303', 'rtp': 'vim' }
 
 " Plugin outside ~/.vim/plugged with post-update hook
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
 " Plug 'ludovicchabant/vim-gutentags'
@@ -231,11 +231,10 @@ Plug 'junegunn/fzf.vim'
 Plug '~/my-prototype-plugin'
 
 "ycm"
-Plug 'Valloric/YouCompleteMe', { 'do': 'CXXFLAGS=\"-stdlib=libc++\" CC=clang CXX=clang++ ./install.py --ninja --clangd-completer --clang-completer' }
-"Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clangd-completer' }
+"Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clangd-completer --omnisharp-completer' }
 
 "clang complete"
-"Plug 'xavierd/clang_complete'
+Plug 'xavierd/clang_complete'
 
 "highlight"
 Plug 'octol/vim-cpp-enhanced-highlight'
@@ -259,15 +258,6 @@ Plug 'majutsushi/tagbar'
 Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
 
-"注释
-Plug 'preservim/nerdcommenter'
-
-"auto pair
-Plug 'jiangmiao/auto-pairs'
-
-"complete
-"Plug 'jayli/vim-easycomplete'
-
 call plug#end()
 
 call glaive#Install()
@@ -278,7 +268,7 @@ Glaive codefmt clang_format_style=chromium
 
 "gutentags config
 " gutentags 搜索工程目录的标志，碰到这些文件/目录名就停止向上一级目录递归
-"let g:gutentags_project_root = ['.root', '.svn', '.repo', '.hg', '.project', 'src', '.git']
+"let g:gutentags_project_root = ['.root', '.svn', '.repo', '.hg', '.project', 'src', '.git','BUILD.gn']
 "
 "" 所生成的数据文件的名称
 "let g:gutentags_ctags_tagfile = '.tags'
@@ -299,7 +289,7 @@ Glaive codefmt clang_format_style=chromium
 
 "clang complete config
 " path to directory where library can be found
-let g:clang_library_path="/home/SERAPHIC/chenghao.xie/toolchain/clang+llvm-9.0.0/lib"
+let g:clang_library_path="/home/SERAPHIC/chenghao.xie/toolchain/clang+llvm-7.0.0-x86_64-linux-gnu-ubuntu-14.04//lib"
 "or path directly to the library file
 "let g:clang_library_path='/usr/lib64/libclang.so.3.8'
 
@@ -322,19 +312,19 @@ let g:ycm_server_log_level = 'info'
 let g:ycm_collect_identifiers_from_comments_and_strings = 1
 let g:ycm_complete_in_strings=1
 let g:ycm_key_invoke_completion = '<c-z>'
-let g:ycm_extra_conf_globlist = ['~/chromium_v73/v73_103/*','~/v5.0_mtk/v5.0/*']
-let g:ycm_global_ycm_extra_conf = '~/v5.0_mtk/v5.0/src/tools/vim/chromium.ycm_extra_conf.py'
+let g:ycm_extra_conf_globlist = ['~/chromium_v73/v73_103/*','~/v5.0/v5.0/*','~/v5.0_mtk/v5.0/*']
+let g:ycm_global_ycm_extra_conf = '~/v5.0/v5.0/.ycm_extra_conf.py'
 let g:ycm_confire_extra=1
 " Let clangd fully control code completion
 let g:ycm_clangd_uses_ycmd_caching = 0
 " Use installed clangd, not YCM-bundled clangd which doesn't get updates.
-let g:ycm_clangd_binary_path = "/home/SERAPHIC/chenghao.xie/toolchain/clang+llvm-9.0.0/bin"
+" let g:ycm_clangd_binary_path = exepath("clangd")
 
 "set completeopt=menu,menuone
 
-noremap gf :tab YcmCompleter GoToInclude<CR>
-noremap <leader>jc :rightbelow vertical YcmCompleter GoToDeclaration<CR>
-noremap <leader>jd :rightbelow vertical YcmCompleter GoToDefinition<CR>
+"nnoremap gf :tab YcmCompleter GoToInclude<CR>
+"nnoremap <leader>jc :rightbelow vertical YcmCompleter GoToDeclaration<CR>
+"nnoremap <leader>jd :rightbelow vertical YcmCompleter GoToDefinition<CR>
 "inoremap <c-z> <NOP>
 
 "default ycm 
@@ -377,14 +367,6 @@ let g:cpp_class_decl_highlight = 1
 
 let g:cpp_experimental_simple_template_highlight = 1
 
-"nerdcommenter
-
-" Add spaces after comment delimiters by default
-let g:NERDSpaceDelims = 1
-
-" Allow commenting and inverting empty lines (useful when commenting a region)
-let g:NERDCommentEmptyLines = 1
-
 "autoformat
 augroup autoformat_settings
   ""autocmd FileType bzl AutoFormatBuffer buildifier
@@ -405,11 +387,6 @@ nmap <F8> :TagbarToggle<CR>
 syntax enable
 set t_Co=256
 set background=dark "light|dark"
-let g:colorscheme_primary_enable_transparent_bg = 1
-set termguicolors
 colorscheme primary
-
-"auto pair
-let g:AutoPairs={'(':')', '[':']', '{':'}',"'":"'",'"':'"', '':'', '<':'>'}
 
 source ~/.vim/vimrc/filetypes.vim
