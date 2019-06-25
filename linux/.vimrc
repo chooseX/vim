@@ -1,6 +1,7 @@
 let $VIM = "$HOME/soft/vim/vim"
 "let $VIMRUNTIME="$HOME/usr/share/vim/vim82/"
 
+
 set showcmd
 set number
 nnoremap <F2> :set paste! <CR>
@@ -206,7 +207,7 @@ Plug 'junegunn/vim-easy-align'
 Plug 'https://github.com/junegunn/vim-github-dashboard.git'
 
 " Multiple Plug commands can be written in a single line using | separators
-"Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 
 " On-demand loading
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
@@ -223,13 +224,18 @@ Plug 'nsf/gocode', { 'tag': 'v.20150303', 'rtp': 'vim' }
 
 " Plugin outside ~/.vim/plugged with post-update hook
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 
 " Plug 'ludovicchabant/vim-gutentags'
 " Unmanaged plugin (manually installed and updated)
 Plug '~/my-prototype-plugin'
 
 "ycm"
-Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clangd-completer' }
+"Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clangd-completer --omnisharp-completer' }
+
+"clang complete"
+Plug 'xavierd/clang_complete'
+
 "highlight"
 Plug 'octol/vim-cpp-enhanced-highlight'
 
@@ -281,8 +287,24 @@ Glaive codefmt clang_format_style=chromium
 "   silent! call mkdir(s:vim_tags, 'p')
 "endif
 
+"clang complete config
+" path to directory where library can be found
+let g:clang_library_path="/home/SERAPHIC/chenghao.xie/toolchain/clang+llvm-7.0.0-x86_64-linux-gnu-ubuntu-14.04//lib"
+"or path directly to the library file
+"let g:clang_library_path='/usr/lib64/libclang.so.3.8'
+
+set completeopt=menu,longest
+"let g:clang_compilation_database='/home/SERAPHIC/chenghao.xie/v5.0_mtk/v5.0/src/sraf/build/'
+let g:clang_complete_auto=1
+let g:clang_snippets = 1
+let g:clang_complete_copen=1
+"let g:clang_periodic_quickfix=1
+"let g:clang_snippets_engine = 'ultisnips'
+let g:clang_snippets_engine = 'clang_complete'
+let g:clang_jumpto_declaration_in_preview_key = "<leader>jd"
+
 "ycm config
-set completeopt=menu,menuone
+"set completeopt=menu,menuone
 let g:ycm_add_preview_to_completeopt = 0
 let g:ycm_show_diagnostics_ui = 0
 let g:ycm_server_log_level = 'info'
@@ -300,10 +322,10 @@ let g:ycm_clangd_uses_ycmd_caching = 0
 
 "set completeopt=menu,menuone
 
-nnoremap gf :tab YcmCompleter GoToInclude<CR>
-nnoremap <leader>jc :rightbelow vertical YcmCompleter GoToDeclaration<CR>
-nnoremap <leader>jd :rightbelow vertical YcmCompleter GoToDefinition<CR>
-inoremap <c-z> <NOP>
+"nnoremap gf :tab YcmCompleter GoToInclude<CR>
+"nnoremap <leader>jc :rightbelow vertical YcmCompleter GoToDeclaration<CR>
+"nnoremap <leader>jd :rightbelow vertical YcmCompleter GoToDefinition<CR>
+"inoremap <c-z> <NOP>
 
 "default ycm 
 let g:ycm_semantic_triggers =  {
