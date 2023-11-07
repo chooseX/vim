@@ -1,6 +1,6 @@
 let $VIM = "$HOME/soft/vim/vim"
 "let $VIMRUNTIME="$HOME/usr/share/vim/vim82/"
-let $LD_LIBRARY_PATH=$HOME.'/toolchain/clang+llvm-9.0.0/lib:'.$LD_LIBRARY_PATH
+let $LD_LIBRARY_PATH=$HOME.'/toolchain/clang+llvm-10.0.0/lib:'.$LD_LIBRARY_PATH
 
 set showcmd
 set number
@@ -77,66 +77,6 @@ function! OpenFile()
 	exec "vsplit ".l:prefix.'.h'
     end
 endfunction
-
-""注释
-"function! AddNotice()
-"    let fts = ['c', 'cpp']
-"    if index(fts, &filetype) != -1 
-"        let l:addch="\/\/" 
-"    elseif (&filetype == 'vim') 
-"        let l:addch="\""
-"    else
-"        let l:addch='#'
-"    end    
-"    s/^/\=l:addch/g
-"endfunction
-"vnoremap / :call AddNotice()<CR>
-"括号补全
-"inoremap ( ()<LEFT>
-"inoremap [ []<LEFT>
-"inoremap { {}<LEFT>
-"
-"function! RemovePairs()
-"    let s:line = getline(".")
-"    let s:previous_char = s:line[col(".")-1]
-"
-"    if index(["(","[","{"],s:previous_char) != -1
-"        let l:original_pos = getpos(".")
-"        execute "normal %"
-"        let l:new_pos = getpos(".")
-"        " only right (
-"        if l:original_pos == l:new_pos
-"            execute "normal! a\<BS>"
-"            return
-"        end
-"
-"        let l:line2 = getline(".")
-"        if len(l:line2) == col(".")
-"            execute "normal! v%xa"
-"        else
-"            execute "normal! v%xi"
-"        end
-"    else
-"        execute "normal! a\<BS>"
-"    end
-"endfunction
-
-" function! RemoveNextDoubleChar(char)
-"     let l:line = getline(".")
-"     let l:next_char = l:line[col(".")]
-" 
-"     if a:char == l:next_char
-"         execute "normal! l"
-"     else
-"         execute "normal! a" . a:char . ""
-"     end
-" endfunction
-
-"inoremap <BS> <C-C>:call RemovePairs()<CR>a
-" inoremap ) <ESC>:call RemoveNextDoubleChar(')')<CR>a
-" inoremap ] <ESC>:call RemoveNextDoubleChar(']')<CR>a
-" inoremap } <ESC>:call RemoveNextDoubleChar('}')<CR>a
-" inoremap > <ESC>:call RemoveNextDoubleChar('>')<CR>a
 
 if has('gui')
   set guioptions-=e
@@ -231,7 +171,7 @@ Plug 'junegunn/fzf.vim'
 Plug '~/my-prototype-plugin'
 
 "ycm"
-Plug 'Valloric/YouCompleteMe', { 'do': 'CXXFLAGS=\"-stdlib=libc++\" CC=clang CXX=clang++ ./install.py --ninja --clangd-completer --clang-completer' }
+Plug 'Valloric/YouCompleteMe', { 'do': 'CXXFLAGS=\"-stdlib=libc++ -std=c++17\" CC=clang CXX=clang++ ./install.py --ninja --clangd-completer --clang-completer' }
 "Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clangd-completer' }
 
 "clang complete"
@@ -268,6 +208,10 @@ Plug 'jiangmiao/auto-pairs'
 "complete
 "Plug 'jayli/vim-easycomplete'
 
+"floaterm
+Plug 'voldikss/vim-floaterm'
+"asyncrun
+Plug 'skywind3000/asyncrun.vim'
 call plug#end()
 
 call glaive#Install()
@@ -297,22 +241,6 @@ Glaive codefmt clang_format_style=chromium
 "   silent! call mkdir(s:vim_tags, 'p')
 "endif
 
-"clang complete config
-" path to directory where library can be found
-let g:clang_library_path="/home/SERAPHIC/chenghao.xie/toolchain/clang+llvm-9.0.0/lib"
-"or path directly to the library file
-"let g:clang_library_path='/usr/lib64/libclang.so.3.8'
-
-set completeopt=menu,longest
-"let g:clang_compilation_database='/home/SERAPHIC/chenghao.xie/v5.0_mtk/v5.0/src/sraf/build/'
-let g:clang_complete_auto=1
-let g:clang_snippets = 1
-let g:clang_complete_copen=1
-"let g:clang_periodic_quickfix=1
-"let g:clang_snippets_engine = 'ultisnips'
-let g:clang_snippets_engine = 'clang_complete'
-let g:clang_jumpto_declaration_in_preview_key = "<leader>jd"
-
 "ycm config
 "set completeopt=menu,menuone
 let g:ycm_add_preview_to_completeopt = 0
@@ -323,12 +251,13 @@ let g:ycm_collect_identifiers_from_comments_and_strings = 1
 let g:ycm_complete_in_strings=1
 let g:ycm_key_invoke_completion = '<c-z>'
 let g:ycm_extra_conf_globlist = ['~/chromium_v73/v73_103/*','~/v5.0_mtk/v5.0/*']
-let g:ycm_global_ycm_extra_conf = '~/v5.0_mtk/v5.0/src/tools/vim/chromium.ycm_extra_conf.py'
-let g:ycm_confire_extra=1
+let g:ycm_global_ycm_extra_conf = '/home/SERAPHIC/chenghao.xie/v7.0/v7.0/src/tools/vim/chromium.ycm_extra_conf.py'
+let g:ycm_confirm_extra_conf = 0
 " Let clangd fully control code completion
-let g:ycm_clangd_uses_ycmd_caching = 0
+let g:ycm_clangd_uses_ycmd_caching = 1
 " Use installed clangd, not YCM-bundled clangd which doesn't get updates.
 let g:ycm_clangd_binary_path = "/home/SERAPHIC/chenghao.xie/toolchain/clang+llvm-9.0.0/bin"
+let g:ycm_goto_buffer_command = 'tab'
 
 "set completeopt=menu,menuone
 
@@ -410,6 +339,18 @@ set termguicolors
 colorscheme primary
 
 "auto pair
-let g:AutoPairs={'(':')', '[':']', '{':'}',"'":"'",'"':'"', '':'', '<':'>'}
+let g:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"', '':''}
+let g:AutoPairsMapBS = 0
+
+"NERDCommenterMappings
+let g:NERDCustomDelimiters = {
+    \ 'gn': { 'left': '#'},
+\ }
+"asynctask
+let g:asyncrun_mode = 'floaterm-reuse'
+let g:asyncrun_open = 8
+
+noremap <F5> :AsyncRun -mode=term -pos=floaterm-reuse -cwd=$(VIM_FILEDIR) 
 
 source ~/.vim/vimrc/filetypes.vim
+source ~/.vim/autoload/mojom.vim
